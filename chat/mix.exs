@@ -1,9 +1,9 @@
-defmodule Chat.MixProject do
+defmodule ChatApp.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :chat,
+      app: :chat_app,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule Chat.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Chat.Application, []},
+      mod: {ChatApp.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -33,6 +33,9 @@ defmodule Chat.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.7.12"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:ecto_sql, "~> 3.10"},
+      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.2"},
@@ -54,7 +57,9 @@ defmodule Chat.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.2"}
+      {:bandit, "~> 1.2"},
+      {:guardian, "~> 2.0"},
+      {:argon2_elixir, "~> 2.0"}
     ]
   end
 
@@ -66,12 +71,15 @@ defmodule Chat.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind chat", "esbuild chat"],
+      "assets.build": ["tailwind chat_app", "esbuild chat_app"],
       "assets.deploy": [
-        "tailwind chat --minify",
-        "esbuild chat --minify",
+        "tailwind chat_app --minify",
+        "esbuild chat_app --minify",
         "phx.digest"
       ]
     ]

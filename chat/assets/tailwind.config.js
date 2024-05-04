@@ -8,8 +8,8 @@ const path = require("path")
 module.exports = {
   content: [
     "./js/**/*.js",
-    "../lib/chat_web.ex",
-    "../lib/chat_web/**/*.*ex"
+    "../lib/chat_app_web.ex",
+    "../lib/chat_app_web/**/*.*ex"
   ],
   theme: {
     extend: {

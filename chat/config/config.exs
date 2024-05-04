@@ -7,19 +7,20 @@
 # General application configuration
 import Config
 
-config :chat,
+config :chat_app,
+  ecto_repos: [ChatApp.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :chat, ChatWeb.Endpoint,
+config :chat_app, ChatAppWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: ChatWeb.ErrorHTML, json: ChatWeb.ErrorJSON],
+    formats: [html: ChatAppWeb.ErrorHTML, json: ChatAppWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Chat.PubSub,
-  live_view: [signing_salt: "b9IAMBQ1"]
+  pubsub_server: ChatApp.PubSub,
+  live_view: [signing_salt: "mqC70Xyh"]
 
 # Configures the mailer
 #
@@ -28,12 +29,12 @@ config :chat, ChatWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :chat, Chat.Mailer, adapter: Swoosh.Adapters.Local
+config :chat_app, ChatApp.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
-  chat: [
+  chat_app: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
@@ -43,7 +44,7 @@ config :esbuild,
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "3.4.0",
-  chat: [
+  chat_app: [
     args: ~w(
       --config=tailwind.config.js
       --input=css/app.css

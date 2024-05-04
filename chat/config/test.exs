@@ -1,14 +1,31 @@
 import Config
 
+# Configure your database
+#
+# The MIX_TEST_PARTITION environment variable can be used
+# to provide built-in test partitioning in CI environment.
+# Run `mix help test` for more information.
+config :chat_app, ChatApp.Repo,
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  database: "chat_app_test#{System.get_env("MIX_TEST_PARTITION")}",
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: System.schedulers_online() * 2
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :chat, ChatWeb.Endpoint,
+config :chat_app, ChatAppWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "6bSTj87NFRo7MHdFll39vImQzZSz6UY9ucPmxBZcLm/tOUAEgVn0zLD3cQ2Oj5wk",
+  secret_key_base: "VrPFdk1Z/JVvhIzEiBMDyWVWNl8CgKirDNu6NIfd8DXohTwrBpQUXb7RT59rSKww",
   server: false
 
+config :guardian, Guardian,
+  allowed_algos: ["HS512"],
+  secret_key: "CK1dKW8a/QLG0JWga8JldLd/I/0vYSW4KGfLHrtR1uFiAdc0YPr3Ek8EuotzWrjp"
+
 # In test we don't send emails.
-config :chat, Chat.Mailer, adapter: Swoosh.Adapters.Test
+config :chat_app, ChatApp.Mailer, adapter: Swoosh.Adapters.Test
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
