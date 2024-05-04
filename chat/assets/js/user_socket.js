@@ -4,7 +4,7 @@
 // Bring in Phoenix channels client library:
 import {Socket} from "phoenix"
 
-// And connect to the path in "lib/chat_app_web/endpoint.ex". We pass the
+// And connect to the path in "lib/chat_web/endpoint.ex". We pass the
 // token for authentication. Read below how it should be used.
 let socket = new Socket("/socket", {params: {token: window.userToken}})
 
@@ -14,7 +14,7 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // If the current user exists you can assign the user's token in
 // the connection for use in the layout.
 //
-// In your "lib/chat_app_web/router.ex":
+// In your "lib/chat_web/router.ex":
 //
 //     pipeline :browser do
 //       ...
@@ -32,12 +32,12 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 //     end
 //
 // Now you need to pass this token to JavaScript. You can do so
-// inside a script tag in "lib/chat_app_web/templates/layout/app.html.heex":
+// inside a script tag in "lib/chat_web/templates/layout/app.html.heex":
 //
 //     <script>window.userToken = "<%= assigns[:user_token] %>";</script>
 //
 // You will need to verify the user token in the "connect/3" function
-// in "lib/chat_app_web/channels/user_socket.ex":
+// in "lib/chat_web/channels/user_socket.ex":
 //
 //     def connect(%{"token" => token}, socket, _connect_info) do
 //       # max_age: 1209600 is equivalent to two weeks in seconds
@@ -56,9 +56,9 @@ socket.connect()
 // Now that you are connected, you can join channels with a topic.
 // Let's assume you have a channel with a topic named `room` and the
 // subtopic is its id - in this case 42:
-let channel = socket.channel("room:42", {})
-channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+// let channel = socket.channel("room:42", {})
+// channel.join()
+//   .receive("ok", resp => { console.log("Joined successfully", resp) })
+//   .receive("error", resp => { console.log("Unable to join", resp) })
 
 export default socket

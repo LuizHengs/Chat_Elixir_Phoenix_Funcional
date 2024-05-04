@@ -1,9 +1,9 @@
-defmodule ChatApp.MixProject do
+defmodule Chat.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :chat_app,
+      app: :chat,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule ChatApp.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {ChatApp.Application, []},
+      mod: {Chat.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -40,7 +40,6 @@ defmodule ChatApp.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.2"},
       {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
       {:heroicons,
@@ -50,16 +49,11 @@ defmodule ChatApp.MixProject do
        app: false,
        compile: false,
        depth: 1},
-      {:swoosh, "~> 1.5"},
-      {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.2"},
-      {:guardian, "~> 2.0"},
-      {:argon2_elixir, "~> 2.0"}
+      {:bandit, "~> 1.2"}
     ]
   end
 
@@ -76,10 +70,10 @@ defmodule ChatApp.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind chat_app", "esbuild chat_app"],
+      "assets.build": ["tailwind chat", "esbuild chat"],
       "assets.deploy": [
-        "tailwind chat_app --minify",
-        "esbuild chat_app --minify",
+        "tailwind chat --minify",
+        "esbuild chat --minify",
         "phx.digest"
       ]
     ]
