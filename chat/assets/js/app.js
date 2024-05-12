@@ -42,40 +42,37 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
-/* Message list code */
-const ul = document.getElementById('msg-list');    // list of messages.
-const name = document.getElementById('name');      // name of message sender
-const msg = document.getElementById('msg');        // message input field
-const send = document.getElementById('send');      // send button
+const ul = document.getElementById('msg-list');  
+const name = document.getElementById('name');     
+const msg = document.getElementById('msg');       
+const send = document.getElementById('send');      
 
-const channel = socket.channel('room:lobby', {});  // connect to chat "room"
+const channel = socket.channel('room:lobby', {}); 
 channel.join(); // join the channel.
 
-// Listening to 'shout' events
 channel.on('shout', function (payload) {
   render_message(payload)
 });
 
-
-// Send the message to the server on "shout" channel
+// Manda a mensagem para o servidor do chat
 function sendMessage() {
 
   channel.push('shout', {        
-    name: name.value || "guest", // get value of "name" of person sending the message. Set guest as default
-    message: msg.value,          // get message text (value) from msg input field.
-    inserted_at: new Date()      // date + time of when the message was sent
+    name: name.value || "guest", 
+    message: msg.value,          
+    inserted_at: new Date()      
   });
 
-  msg.value = '';                // reset the message input field for next message.
-  window.scrollTo(0, document.documentElement.scrollHeight) // scroll to the end of the page on send
+  msg.value = '';               
+  window.scrollTo(0, document.documentElement.scrollHeight) 
 }
 
-// Render the message with Tailwind styles
+// Traduz as informações recebidas em um trecho
+// html para ser inserido no chat
 function render_message(payload) {
 
-  const li = document.createElement("li"); // create new list item DOM element
+  const li = document.createElement("li"); 
 
-  // Message HTML with Tailwind CSS Classes for layout/style:
   li.innerHTML = `
   <div class="flex flex-row w-[95%] mx-2 border-b-[1px] border-slate-300 py-2">
     <div class="text-left w-1/5 font-semibold text-slate-800 break-words">
@@ -90,25 +87,24 @@ function render_message(payload) {
     </div>
   </div>
   `
-  // Append to list
+
   ul.appendChild(li);
 }
 
-// Listen for the [Enter] keypress event to send a message:
+// Verifica se o usuário pressionou o enter
 msg.addEventListener('keypress', function (event) {
-  if (event.keyCode == 13 && msg.value.length > 0) { // don't sent empty msg.
+  if (event.keyCode == 13 && msg.value.length > 0) {
     sendMessage()
   }
 });
 
-// On "Send" button press
+// verifica se o usuário clicou em enviar
 send.addEventListener('click', function (event) {
-  if (msg.value.length > 0) { // don't sent empty msg.
+  if (msg.value.length > 0) {
     sendMessage()
   }
 });
 
-// Date formatting
 function formatDate(datetime) {
   const m = new Date(datetime);
   return m.getUTCFullYear() + "/" 
@@ -116,7 +112,6 @@ function formatDate(datetime) {
     + ("0" + m.getUTCDate()).slice(-2);
 }
 
-// Time formatting
 function formatTime(datetime) {
   const m = new Date(datetime);
   return ("0" + m.getUTCHours()).slice(-2) + ":"
